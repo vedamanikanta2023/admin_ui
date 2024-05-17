@@ -1,0 +1,18 @@
+.search-button {
+    width: 96%;
+    height: 22px;
+    margin: 15px 12px;
+    border: 1px solid #0f2020;
+}
+
+.search-icon {
+    background-color: blanchedalmond;
+    height: 26px;
+    border: 1px solid rgb(68, 82, 77);
+    border-radius: 12px;
+}
+
+.search-container {
+    display: flex;
+    align-items: center;
+}
