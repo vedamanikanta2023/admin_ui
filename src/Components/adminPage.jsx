@@ -161,20 +161,17 @@ const AdminPage = (props) => {
                     <td><span title="edit" style={{ marginRight: 8, cursor: "pointer" }}>{editIcon}</span><span title="delete" style={{ cursor: 'pointer' }} onClick={() => deletingProfilesFun(admin)}>{deleteIcon}</span></td>
                 </tr>)}
             </table>
-            <div style={{
-                display: "flex", flexDirection: 'row'
-                , justifyContent: "space-around"
-            }}>
+            <div className="footer-container" >
                 <button onClick={handleDeleteClick} disabled={!!(deletingProfiles.length === 0)}>Delete Selecte</button>
-                <div style={{ display: "flex", flexDirection: 'row', justifyContent: "space-between" }}>
-                    <button disabled={currentPage < 2} onClick={previousPage}>
-                        <ChevronLeft />
+                <div style={{ display: "flex", flexDirection: 'row', justifyContent: "space-between",gap:"8px" }}>
+                    <button className="previous-button page-button" disabled={currentPage < 2} onClick={previousPage}>
+                        <ChevronLeft />{"<"}
                     </button>
                     {
-                        numwisePages.map(page => <button onClick={() => setCurrentPage(page)}>{page}</button>)
+                        numwisePages.map(page => <button className="page-button" onClick={() => setCurrentPage(page)}>{page}</button>)
                     }
-                    <button disabled={currentPage === pages} onClick={nextPage}>
-                        <ChevronRight />
+                    <button className="next-button page-button" disabled={currentPage === pages} onClick={nextPage}>
+                        <ChevronRight height={10} width={10} />{">"}
                     </button>
                 </div>
             </div>
