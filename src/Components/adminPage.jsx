@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import { ChevronLeft } from 'lucide-react';
 import { ChevronRight } from 'lucide-react';
+import { Search } from 'lucide-react';
 import './adminPage.css'
 
 const url = 'https://geektrust.s3-ap-southeast-1.amazonaws.com/adminui-problem/members.json';
@@ -14,10 +15,7 @@ const editIcon = <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" 
     <path fill-rule="evenodd" d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5z" />
 </svg>;
 
-const checkedIcon = <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-check2-square" viewBox="0 0 16 16">
-    <path d="M3 14.5A1.5 1.5 0 0 1 1.5 13V3A1.5 1.5 0 0 1 3 1.5h8a.5.5 0 0 1 0 1H3a.5.5 0 0 0-.5.5v10a.5.5 0 0 0 .5.5h10a.5.5 0 0 0 .5-.5V8a.5.5 0 0 1 1 0v5a1.5 1.5 0 0 1-1.5 1.5z" />
-    <path d="m8.354 10.354 7-7a.5.5 0 0 0-.708-.708L8 9.293 5.354 6.646a.5.5 0 1 0-.708.708l3 3a.5.5 0 0 0 .708 0" />
-</svg>;
+
 
 const AdminPage = (props) => {
     const [admins, setAdmins] = useState([]);
@@ -129,10 +127,10 @@ const AdminPage = (props) => {
         fetchAdmins()
     }, [])
 
-    return <div>
+    return <div className="">
         {(admins.length > 0) ? <div>
             <div className="search-container">
-                <input className="search-button"
+                <input className="search-button search-field"
                     ref={inputRef}
                     onKeyDown={(e) => {
                         if (e.keyCode === 8 || e.keyCode === 46) {
@@ -141,17 +139,21 @@ const AdminPage = (props) => {
                     }}
                     value={searchString}
                     onChange={searchInputChange} placeholder="Search by name, email or role" />
-                <button className="search-icon" onClick={searchWithString}>Search</button>
+                <button className="search-icon" onClick={searchWithString}>    <Search size={20} />
+                </button>
             </div>
 
 
-            <table width={'100%'}>
+            <table width={'100%'} gap={"10"}>
                 <tr>
-                    <th>{checkedIcon}</th>
+                    <th><input type="checkbox"
+                    //  checked={true}
+                    //  onClick={() => addDeletingProfile(admin)}
+                      /></th>
                     {headings.map((heading) => <th key={heading} align="start">{heading.toUpperCase()}</th>)}
                     <th>Actions</th>
                 </tr>
-                {tenRecords.map(admin => <tr key={JSON.stringify(admin)}>
+                {tenRecords.map(admin => <tr key={JSON.stringify(admin)} style={{height:'30px'}}>
                     <td><input type="checkbox" checked={deletingProfiles.includes(admin)} onClick={() => addDeletingProfile(admin)} /></td>
                     {
                         headings.map((value, ix) => <td key={ix} align="start">
@@ -162,16 +164,16 @@ const AdminPage = (props) => {
                 </tr>)}
             </table>
             <div className="footer-container" >
-                <button onClick={handleDeleteClick} disabled={!!(deletingProfiles.length === 0)}>Delete Selecte</button>
+                <button onClick={handleDeleteClick} disabled={!!(deletingProfiles.length === 0)} className="delete-button">Delete Selected</button>
                 <div style={{ display: "flex", flexDirection: 'row', justifyContent: "space-between",gap:"8px" }}>
                     <button className="previous-button page-button" disabled={currentPage < 2} onClick={previousPage}>
-                        <ChevronLeft />{"<"}
+                        <ChevronLeft size={12} />
                     </button>
                     {
-                        numwisePages.map(page => <button className="page-button" onClick={() => setCurrentPage(page)}>{page}</button>)
+                        numwisePages.map(page => <button className={`page-button ${currentPage===page?"current-page":""}`} onClick={() => setCurrentPage(page)}>{page}</button>)
                     }
                     <button className="next-button page-button" disabled={currentPage === pages} onClick={nextPage}>
-                        <ChevronRight height={10} width={10} />{">"}
+                        <ChevronRight size={12} />
                     </button>
                 </div>
             </div>

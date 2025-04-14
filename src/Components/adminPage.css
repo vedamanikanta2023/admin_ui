@@ -1,47 +1,100 @@
 .search-button {
     width: 96%;
-    height: 22px;
-    margin: 15px 12px;
+    /* margin: 15px 12px; */
     border: 1px solid #0f2020;
 }
 
 .search-icon {
+    border-radius: 8px;
     background-color: blanchedalmond;
-    height: 26px;
-    border: 1px solid rgb(68, 82, 77);
-    border-radius: 12px;
+    height: 100%;
+    border: 1.5px solid #635e5e;
+    padding: 5px 15px;
+
+    font-size: 16px;
+    /* font-family: inherit; */
+    display: flex;
+    align-items: center;
 }
 
 .search-container {
     display: flex;
     align-items: center;
+    /* padding: 8px; */
+    gap: 8px;
+}
+
+.search-field {
+    width: 100%;
+    padding: 5px 15px;
+    border: 1.5px solid #635e5e;
+    border-radius: 8px;
+    font-size: 16px;
+    font-family: inherit;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+    outline: none;
+    background-color: #fff;
 }
 
 .page-button {
-    height: 20px;
-    width: 20px;
-    /* padding: 5px 5px; */
+    /* height: 20px;
+    width: 20px; */
     border-radius: 50%;
-    border: 1px solid blue;
+    border: 1px solid #635e5e;
+    color: #635e5e;
     display: flex;
     align-items: center;
     justify-content: center;
+    padding: 5px 10px;
 }
+
+.page-button:disabled {
+    background-color: #f2f2f2;
+    color: #b0b0b0;
+    border-color: #ccc;
+    cursor: not-allowed;
+    opacity: 0.6;
+}
+
 .previous-button {
-    padding:9px 13px;
+    /* padding:9px 13px; */
     border-radius: 50%;
-    border:1px solid blue;
+    border: 1px solid #635e5e;
 }
 
 .next-button {
-    padding:9px 13px;
+    /* padding:9px 13px; */
     border-radius: 50%;
-    border:1px solid blue;
+    border: 1px solid #635e5e;
 }
 
 .footer-container {
     display: flex;
     flex-direction: row;
-    justify-content: space-around;
+    justify-content: space-between;
     padding: 8px 0px;
+    margin-top: 8px;
+}
+
+
+.current-page {
+    background-color: #635e5e;
+    color: white;
+    font-weight: bold;
+}
+
+.delete-button {
+    background-color: #fff;
+    color: #4a4747;
+    border: 1.5px solid #635e5e;
+    border-radius: 8px;
+    padding: 5px 10px;
+}
+
+.delete-button:disabled {
+    background-color: #f2f2f2;
+    color: #a0a0a0;
+    border-color: #ccc;
+    cursor: not-allowed;
+    opacity: 0.6;
 }
