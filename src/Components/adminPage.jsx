@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useReducer, useRef, useState } from "react";
 import { ChevronLeft } from "lucide-react";
 import { ChevronRight } from "lucide-react";
 import { Search } from "lucide-react";
@@ -37,6 +37,19 @@ const editIcon = (
   </svg>
 );
 
+const reducer = (state, action) => {
+  switch (action.type) {
+    case "reset":
+      return {};
+    case "setRow":
+      return { ...action.details };
+    case "edit":
+      return { ...state, [action.key]: action.value };
+    default:
+      return {};
+  }
+};
+
 const AdminPage = (props) => {
   const [currentPage, setCurrentPage] = useState(1);
   const [searchString, setSearchString] = useState("");
@@ -45,6 +58,8 @@ const AdminPage = (props) => {
   const [allAdmins, setAllAdmins] = useState([]);
   const [filteredAdmins, setFilteredAdmins] = useState([]);
   const [currentPageAdmins, setCurrentPageAdmins] = useState([]);
+
+  const [editingAdmin, dispatchAction] = useReducer(reducer, {});
 
   const inputRef = useRef();
 
@@ -56,7 +71,9 @@ const AdminPage = (props) => {
     // selectingCurrentPagesRecords()
   };
   const headings =
-    currentPageAdmins.length > 0 ? Object.keys(currentPageAdmins[0]) : [];
+    currentPageAdmins.length > 0
+      ? Object.keys(currentPageAdmins[0]).filter((key) => key !== "originalId")
+      : [];
 
   const pages = Math.ceil(filteredAdmins.length / 10);
   const numwisePages = React.useCallback(() => {
@@ -73,7 +90,11 @@ const AdminPage = (props) => {
     let index = 1;
     for (let i = ten - 10; i < ten; i++) {
       if (i < filteredAdmins.length) {
-        let newObj = { ...filteredAdmins[i], id: index };
+        let newObj = {
+          ...filteredAdmins[i],
+          id: index,
+          originalId: filteredAdmins[i].id,
+        };
         emptyArry.push(newObj);
         index += 1;
       }
@@ -101,10 +122,22 @@ const AdminPage = (props) => {
     const str = e.target.value;
     setSearchString(str);
   };
-
+  const setChangedDetialsInAllAdmins = ()=>{
+    const updatedAdmins = allAdmins.map((admin)=>{
+        if (admin.id===editingAdmin.originalId){
+            let editedAdmin = {...editingAdmin};
+            editedAdmin["id"]=editingAdmin.originalId
+            delete editedAdmin.originalId;
+            return editedAdmin;
+        }
+        return admin;
+    })
+    setAllAdmins(updatedAdmins)
+  }
   const deletingProfilesFun = (profile) => {
     const filterRemainingProfiles = allAdmins.filter(
-      (admin) => admin["email"]+admin["name"] !== profile["email"]+profile["name"]
+      (admin) =>
+        admin["email"] + admin["name"] !== profile["email"] + profile["name"]
     );
     setAllAdmins(filterRemainingProfiles);
   };
@@ -121,9 +154,11 @@ const AdminPage = (props) => {
   };
 
   const handleDeleteClick = () => {
-    const deleteMails = deletingProfiles.map((rec) => rec["email"]+rec["name"]);
+    const deleteMails = deletingProfiles.map(
+      (rec) => rec["email"] + rec["name"]
+    );
     const filterRemainingProfiles = allAdmins.filter(
-      (admin) => !deleteMails.includes(admin["email"]+admin["name"])
+      (admin) => !deleteMails.includes(admin["email"] + admin["name"])
     );
     setAllAdmins(filterRemainingProfiles);
     setDeletingProfiles([]);
@@ -140,12 +175,13 @@ const AdminPage = (props) => {
   useEffect(() => {
     selectingCurrentPagesRecords();
   }, [filteredAdmins, currentPage]);
-  useEffect(()=>{
-    if (allAdmins.length){
 
-        searchWithString()
+  useEffect(() => {
+    if (allAdmins.length) {
+      searchWithString();
     }
-  },[allAdmins])
+  }, [allAdmins]);
+
   useEffect(() => {
     fetchAdmins();
   }, []);
@@ -201,13 +237,26 @@ const AdminPage = (props) => {
                     </td>
                     {headings.map((value, ix) => (
                       <td key={ix} align="start">
-                        {admin[value]}
+                        {admin.originalId === editingAdmin.originalId &&
+                        value !== "id" ? (
+                          <input onBlur={setChangedDetialsInAllAdmins} onChange={(e)=>dispatchAction({type:"edit",key:value,value:e.target.value})} value={editingAdmin[value]} />
+                        ) : (
+                          admin[value]
+                        )}
                       </td>
                     ))}
                     <td>
                       <span
                         title="edit"
                         style={{ marginRight: 8, cursor: "pointer" }}
+                        onClick={() =>{
+                            setChangedDetialsInAllAdmins();
+                            dispatchAction({ type: "setRow", details: admin });
+                            if(editingAdmin.originalId===admin.originalId){
+                                dispatchAction({type:"reset"});
+                            }
+                        }
+                        }
                       >
                         {editIcon}
                       </span>
