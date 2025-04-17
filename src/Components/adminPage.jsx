@@ -227,7 +227,7 @@ const AdminPage = (props) => {
                   <th>Actions</th>
                 </tr>
                 {currentPageAdmins.map((admin) => (
-                  <tr key={JSON.stringify(admin)} style={{ height: "30px" }}>
+                  <tr key={JSON.stringify(admin)} style={{ height: "30px", backgroundColor:deletingProfiles.includes(admin)?"grey": "transparent",color:deletingProfiles.includes(admin)?"white":"black" }}>
                     <td>
                       <input
                         type="checkbox"
