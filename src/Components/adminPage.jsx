@@ -1,4 +1,4 @@
-import React, { useEffect, useReducer, useRef, useState } from "react";
+import React, { useCallback, useEffect, useReducer, useRef, useState } from "react";
 import { ChevronLeft } from "lucide-react";
 import { ChevronRight } from "lucide-react";
 import { Search } from "lucide-react";
@@ -103,20 +103,24 @@ const AdminPage = (props) => {
     emptyArry = [];
   };
 
-  const searchWithString = () => {
+  const searchWithString = useCallback(() => {
     if (!searchString) {
+      // Optionally alert or focus input
       // alert("Please enter text");
       // inputRef.current.focus();
+      return;
     }
-
+  
     const filterObjectsWithStr = allAdmins.filter((rec) => {
       const vls = Object.values(rec);
-      return vls.some((string1) => String(string1).includes(searchString));
-      // [...Object.values(rec)].includes(str)
+      return vls.some((string1) =>
+        String(string1).toLowerCase().includes(searchString.toLowerCase())
+      );
     });
-
+  
     setFilteredAdmins(filterObjectsWithStr);
-  };
+  }, [searchString, allAdmins, setFilteredAdmins]);
+  
 
   const searchInputChange = (e) => {
     const str = e.target.value;
