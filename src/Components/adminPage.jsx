@@ -171,9 +171,16 @@ const AdminPage = (props) => {
   const nextPage = () => {
     setCurrentPage(currentPage + 1);
   };
-
+const selectAll =(e)=>{
+  if(e.target.checked===true){
+    setDeletingProfiles([...currentPageAdmins])
+  }else{
+    setDeletingProfiles([])
+  }
+}
   useEffect(() => {
     selectingCurrentPagesRecords();
+    setDeletingProfiles([]);
   }, [filteredAdmins, currentPage]);
 
   useEffect(() => {
@@ -204,7 +211,6 @@ const AdminPage = (props) => {
               placeholder="Search by name, email or role"
             />
             <button className="search-icon" onClick={searchWithString}>
-              {" "}
               <Search size={20} />
             </button>
           </div>
@@ -215,8 +221,8 @@ const AdminPage = (props) => {
                   <th>
                     <input
                       type="checkbox"
-                      //  checked={true}
-                      //  onClick={() => addDeletingProfile(admin)}
+                      checked={deletingProfiles.length===currentPageAdmins.length}
+                      onChange={selectAll}
                     />
                   </th>
                   {headings.map((heading) => (
