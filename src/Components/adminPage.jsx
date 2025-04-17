@@ -122,18 +122,18 @@ const AdminPage = (props) => {
     const str = e.target.value;
     setSearchString(str);
   };
-  const setChangedDetialsInAllAdmins = ()=>{
-    const updatedAdmins = allAdmins.map((admin)=>{
-        if (admin.id===editingAdmin.originalId){
-            let editedAdmin = {...editingAdmin};
-            editedAdmin["id"]=editingAdmin.originalId
-            delete editedAdmin.originalId;
-            return editedAdmin;
-        }
-        return admin;
-    })
-    setAllAdmins(updatedAdmins)
-  }
+  const setChangedDetialsInAllAdmins = () => {
+    const updatedAdmins = allAdmins.map((admin) => {
+      if (admin.id === editingAdmin.originalId) {
+        let editedAdmin = { ...editingAdmin };
+        editedAdmin["id"] = editingAdmin.originalId;
+        delete editedAdmin.originalId;
+        return editedAdmin;
+      }
+      return admin;
+    });
+    setAllAdmins(updatedAdmins);
+  };
   const deletingProfilesFun = (profile) => {
     const filterRemainingProfiles = allAdmins.filter(
       (admin) =>
@@ -171,13 +171,13 @@ const AdminPage = (props) => {
   const nextPage = () => {
     setCurrentPage(currentPage + 1);
   };
-const selectAll =(e)=>{
-  if(e.target.checked===true){
-    setDeletingProfiles([...currentPageAdmins])
-  }else{
-    setDeletingProfiles([])
-  }
-}
+  const selectAll = (e) => {
+    if (e.target.checked === true) {
+      setDeletingProfiles([...currentPageAdmins]);
+    } else {
+      setDeletingProfiles([]);
+    }
+  };
   useEffect(() => {
     selectingCurrentPagesRecords();
     setDeletingProfiles([]);
@@ -187,7 +187,7 @@ const selectAll =(e)=>{
     if (allAdmins.length) {
       searchWithString();
     }
-  }, [allAdmins]);
+  }, [allAdmins,searchWithString]);
 
   useEffect(() => {
     fetchAdmins();
@@ -221,7 +221,9 @@ const selectAll =(e)=>{
                   <th>
                     <input
                       type="checkbox"
-                      checked={deletingProfiles.length===currentPageAdmins.length}
+                      checked={
+                        deletingProfiles.length === currentPageAdmins.length
+                      }
                       onChange={selectAll}
                     />
                   </th>
@@ -233,7 +235,18 @@ const selectAll =(e)=>{
                   <th>Actions</th>
                 </tr>
                 {currentPageAdmins.map((admin) => (
-                  <tr key={JSON.stringify(admin)} style={{ height: "30px", backgroundColor:deletingProfiles.includes(admin)?"grey": "transparent",color:deletingProfiles.includes(admin)?"white":"black" }}>
+                  <tr
+                    key={JSON.stringify(admin)}
+                    style={{
+                      height: "30px",
+                      backgroundColor: deletingProfiles.includes(admin)
+                        ? "grey"
+                        : "transparent",
+                      color: deletingProfiles.includes(admin)
+                        ? "white"
+                        : "black",
+                    }}
+                  >
                     <td>
                       <input
                         type="checkbox"
@@ -245,7 +258,17 @@ const selectAll =(e)=>{
                       <td key={ix} align="start">
                         {admin.originalId === editingAdmin.originalId &&
                         value !== "id" ? (
-                          <input onBlur={setChangedDetialsInAllAdmins} onChange={(e)=>dispatchAction({type:"edit",key:value,value:e.target.value})} value={editingAdmin[value]} />
+                          <input
+                            onBlur={setChangedDetialsInAllAdmins}
+                            onChange={(e) =>
+                              dispatchAction({
+                                type: "edit",
+                                key: value,
+                                value: e.target.value,
+                              })
+                            }
+                            value={editingAdmin[value]}
+                          />
                         ) : (
                           admin[value]
                         )}
@@ -254,20 +277,21 @@ const selectAll =(e)=>{
                     <td>
                       <span
                         title="edit"
+                        className="edit"
                         style={{ marginRight: 8, cursor: "pointer" }}
-                        onClick={() =>{
-                            setChangedDetialsInAllAdmins();
-                            dispatchAction({ type: "setRow", details: admin });
-                            if(editingAdmin.originalId===admin.originalId){
-                                dispatchAction({type:"reset"});
-                            }
-                        }
-                        }
+                        onClick={() => {
+                          setChangedDetialsInAllAdmins();
+                          dispatchAction({ type: "setRow", details: admin });
+                          if (editingAdmin.originalId === admin.originalId) {
+                            dispatchAction({ type: "reset" });
+                          }
+                        }}
                       >
                         {editIcon}
                       </span>
                       <span
                         title="delete"
+                        className="delete"
                         style={{ cursor: "pointer" }}
                         onClick={() => deletingProfilesFun(admin)}
                       >
@@ -294,7 +318,7 @@ const selectAll =(e)=>{
                   }}
                 >
                   <button
-                    className="previous-button page-button"
+                    className="previous-page page-button"
                     disabled={currentPage < 2}
                     onClick={previousPage}
                   >
@@ -302,7 +326,7 @@ const selectAll =(e)=>{
                   </button>
                   {numwisePages.map((page) => (
                     <button
-                      className={`page-button ${
+                      className={`page-button Page-${page} ${
                         currentPage === page ? "current-page" : ""
                       }`}
                       onClick={() => setCurrentPage(page)}
@@ -311,7 +335,7 @@ const selectAll =(e)=>{
                     </button>
                   ))}
                   <button
-                    className="next-button page-button"
+                    className="next-page page-button"
                     disabled={currentPage === pages}
                     onClick={nextPage}
                   >

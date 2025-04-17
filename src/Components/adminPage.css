@@ -56,13 +56,13 @@
     opacity: 0.6;
 }
 
-.previous-button {
+.previous-page {
     /* padding:9px 13px; */
     border-radius: 50%;
     border: 1px solid #635e5e;
 }
 
-.next-button {
+.next-page {
     /* padding:9px 13px; */
     border-radius: 50%;
     border: 1px solid #635e5e;
